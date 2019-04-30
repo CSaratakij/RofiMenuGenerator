@@ -21,14 +21,88 @@
                 <h5 class="text-muted"><em>generate rofi menu with ease</em></h5>
             </div>
             <div>
-
+                <!-- Setting -->
+                <div class="card">
+                    <div class="card-header">
+                        Setting
+                    </div>
+                    <div class="card-body">
+                        <form>
+                          <div class="form-group">
+                            <label for="menuTitle">Title</label>
+                            <input type="text" class="form-control" id="menuTitle" placeholder="Enter menu name" value="Menu">
+                          </div>
+                          <div class="form-group">
+                              <div class="form-row">
+                                  <div class="form-col">
+                                    <label for="menuFont">Font</label>
+                                    <input type="text" class="form-control" id="menuFont" placeholder="Enter font name" value="mono-space">
+                                  </div>
+                                  <div class="px-2"></div>
+                                  <div class="form-col">
+                                    <label for="menuFontSize">Size</label>
+                                    <input type="text" class="form-control" id="menuFontSize" placeholder="Enter font size" value="18">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="py-2"></div>
+                          <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Hide scrollbar</label>
+                          </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="py-2"></div>
+                <!-- Menu -->
+                <div class="card">
+                    <div class="card-header">
+                        Menu
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <td scope="col" colspan="2">Name</th>
+                              <td scope="col" colspan="2">Command</th>
+                              <th scope="col"></th>
+                            </tr>
+                          </thead>
+                          <tbody id="menu-list">
+                            <tr>
+                              <th class="align-middle" scope="row">1</th>
+                              <td colspan="2" class="align-middle">
+                                  <input type="text" class="form-control" placeholder="Name..." aria-label="" aria-describedby="button-addon2">
+                              </td>
+                              <td colspan="2" class="align-middle">
+                                  <input type="text" class="form-control" placeholder="Command..." aria-label="" aria-describedby="button-addon2">
+                              </td>
+                              <th class="text-center text-danger align-middle">
+                                  <a style="cursor: pointer" onclick="alert('1')">X<a>
+                              </th>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                    <!-- Add new menu entry button -->
+                    <div style="align-self: flex-end;">
+                        <button type="button" class="btn btn-lg btn-outline-secondary"><span><strong>+</strong></span></button>
+                    </div>
+                </div>
             </div>
+            <div class="py-3"></div>
+            <!-- Generate Button -->
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-success">Generate</button>
+            </div>
+            <div class="py-4"></div>
         </div>
         </main>
-        <footer class="footer mt-auto py-2 bg-dark text-white">
+        <footer class="footer mt-auto py-1 bg-dark text-white">
           <!-- <div class="container"> -->
           <div class="text-center">
-              <span>Made with <i class="fas fa-heart"></i> by <a href="https://github.com/CSaratakij">CSaratakij</a></span>
+              <span>Made with <i class="fas fa-heart"></i> by <a class="text-white" href="https://github.com/CSaratakij">CSaratakij</a></span>
           </div>
         </footer>
         <!-- Popper, Bootstrap js-->
