@@ -100,6 +100,41 @@ function setMenuEntryViews(entryList) {
     }
 }
 
+function onButtonGenerateClick() {
+    var info = getMenuInfo();
+
+    if (info.entryList.length == 0) {
+        let title = document.getElementById("warning-modal-title");
+        let body = document.getElementById("warning-modal-body");
+        let button = document.getElementById("warning-modal-close-button");
+
+        title.innerHTML = "Warning";
+        body.innerHTML = "Please enter atleast 1 menu entry...";
+
+        button.innerHTML = "Add a menu entry";
+        button.onclick = function() {
+            addMenuEntry('', '');
+        }
+
+        $('#warning-modal').modal('toggle');
+        return;
+    }
+
+    var result = generateBashScript(info);
+
+    let title = document.getElementById("result-modal-title");
+    let body = document.getElementById("result-text");
+    let button = document.getElementById("result-modal-button");
+    let tempInput = document.getElementById("temp-input");
+
+    title.innerHTML = "Complete"
+
+    body.innerHTML = result;
+    tempInput.value = result;
+
+    $('#result-modal').modal('toggle');
+}
+
 /* View Model */
 function getMenuInfo(isAutoSubstitute = true) {
     let menu = new Object();
@@ -152,44 +187,34 @@ function getMenuInfo(isAutoSubstitute = true) {
 /* App Logic */
 function intialize() {
     addMenuEntry('', '');
-}
 
-function onButtonGenerateClick() {
-    var info = getMenuInfo();
+    var clipboard = new ClipboardJS('.btn');
 
-    if (info.entryList.length == 0) {
-        let title = document.getElementById("warning-modal-title");
-        let body = document.getElementById("warning-modal-body");
-        let button = document.getElementById("warning-modal-close-button");
+    clipboard.on('success', function(e) {
+        console.log(e);
+    });
 
-        title.innerHTML = "Warning";
-        body.innerHTML = "Please enter atleast 1 menu entry...";
-
-        button.innerHTML = "Add a menu entry";
-        button.onclick = function() {
-            addMenuEntry('', '');
-        }
-
-        $('#warning-modal').modal('toggle');
-        return;
-    }
-
-    generateBashScript(info);
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
 }
 
 function generateBashScript(menu) {
     //Shebang bash script
-    let source = "#!/bin/sh\n\n"
-    source += "MENU=\""
+    let source = ""
+    source += "#!/bin/sh\n\n";
 
     //Menu list
+    source += "MENU=\""
     let i;
+
     for (i = 0; i < menu.entryList.length; i++) {
         source += menu.entryList[i].name;
         if (i + 1 < menu.entryList.length) {
             source += "|";
         }
     }
+
     source += "\"\n";
 
     //Font
