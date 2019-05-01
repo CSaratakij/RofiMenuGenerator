@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Rofi Menu Generator</title>
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+        <!-- App -->
+        <script src="js/index.js"></script>
+    </head>
+    <body onload="intialize()" class="d-flex flex-column h-100">
+        <!-- Github Ribbon -->
+        <a href="https://github.com/CSaratakij/rofi-menu-generator"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+        <!-- App -->
+        <main role="main" class="flex-shrink-0">
+        <div class="container">
+            <div class="text-center p-4">
+                <h1>Rofi Menu Generator</h1>
+                <hr>
+                <h5 class="text-muted"><em>"generate rofi menu with ease"</em></h5>
+            </div>
+            <div>
+                <!-- Setting -->
+                <div class="card">
+                    <div class="card-header">
+                        <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#settingInfo">
+                            Setting
+                        </button>
+                    </div>
+                    <div class="card-body collapse show" id="settingInfo">
+                        <form>
+                          <div class="form-group">
+                            <label for="menuTitle">Title</label>
+                            <input type="text" class="form-control" id="menuTitle" placeholder="Enter menu name" value="Menu">
+                          </div>
+                          <div class="form-group">
+                              <div class="form-row">
+                                  <div class="form-col">
+                                    <label for="menuFont">Font</label>
+                                    <input type="text" class="form-control" id="menuFont" placeholder="Enter font name" value="mono-space">
+                                  </div>
+                                  <div class="px-2"></div>
+                                  <div class="form-col">
+                                    <label for="menuFontSize">Size</label>
+                                    <input type="number" class="form-control" id="menuFontSize" placeholder="Enter font size" value="18">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="py-2"></div>
+                          <div class="form-group form-check align-middle">
+                            <input type="checkbox" class="form-check-input" id="hideScrollbarCheck">
+                            <label class="form-check-label" for="hideScrollbarCheck">Hide scrollbar</label>
+                          </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="py-2"></div>
+                <!-- Menu -->
+                <div class="card">
+                    <div class="card-header">
+                        <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#menuInfo">
+                            Menu
+                        </button>
+                    </div>
+                    <div class="card-body collapse show" id="menuInfo">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <td scope="col" colspan="2">Name</th>
+                              <td scope="col" colspan="2">Command</th>
+                              <th scope="col"></th>
+                            </tr>
+                          </thead>
+                          <tbody id="menu-list">
+                              <template>
+                                <tr id="menu-1">
+                                  <th class="align-middle" scope="row">1</th>
+                                  <td colspan="2" class="align-middle">
+                                      <input type="text" class="form-control" placeholder="Enter menu item name...">
+                                  </td>
+                                  <td colspan="2" class="align-middle">
+                                      <input type="text" class="form-control" placeholder="Enter executable app command...">
+                                  </td>
+                                  <th class="text-center text-danger align-middle">
+                                      <a style="cursor: pointer">X<a>
+                                  </th>
+                                </tr>
+                              </template>
+                          </tbody>
+                        </table>
+
+                    <!-- Add new menu entry button -->
+                    <div class="d-flex mb-0 input-group-prepend px-0">
+                        <button onclick="sortMenuEntry()" type="button" class="ml-auto mb-0 btn btn-md btn-outline-secondary"><span>Sort</span></button>
+                        <button onclick="addMenuEntry('', '')" type="button" class="btn btn-md btn-outline-secondary"><span><strong>+</strong></span></button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="py-4"></div>
+            <!-- Generate Button -->
+            <div class="d-flex justify-content-center">
+                <button onclick="onButtonGenerateClick()" type="button" class="btn btn-lg btn-success">Generate</button>
+            </div>
+            <div class="text-center mt-1 text-primary">
+                <p onclick="showHelp()" style="text-decoration: underline; cursor: pointer"><small>How to use</small></p>
+            </div>
+            <div class="py-5"></div>
+            <div class="py-3"></div>
+        </div>
+        <!-- Warning Modal -->
+        <div class="modal fade" id="warning-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="warning-modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div id="warning-modal-body" class="modal-body">
+                ...
+              </div>
+              <div class="modal-footer">
+                <button id="warning-modal-close-button" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Help Modal -->
+        <div class="modal fade" id="help-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="help-modal-title">Help</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div id="help-modal-body" class="modal-body">
+                  <p>
+                  This is a tools to generate the <strong>bash</strong> script and use <a href="https://github.com/davatorium/rofi"><u>rofi</u></a>
+                    to generate a menu by pipe the text into rofi.<br>
+                    Once you generate a menu, make the script executable and run.<br><br>
+                    This tools only generate a menu.<br>
+                    For rofi <strong>theme</strong>, please goto this <a href="https://github.com/davatorium/rofi-themes" ><u>link</u></a><br>
+                    For further information, see a <a href="https://github.com/CSaratakij/rofi-menu-generator"><u>git repository</u></a>
+                  </p>
+              </div>
+              <div class="modal-footer">
+                <button id="help-modal-close-button" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Result Modal -->
+        <div class="modal fade" id="result-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="result-modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div id="result-modal-body" class="modal-body card-header">
+                  <code class="text-dark" style="white-space: pre-wrap" id="result-text"></code>
+              </div>
+              <div class="modal-footer">
+                <button data-dismiss="modal" data-clipboard-target="#temp-input" id="result-modal-button" type="button" class="btn btn-primary">Copy to clipboard</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </main>
+        <footer class="footer mt-auto py-3 bg-dark">
+          <div class="text-center mx-2 text-white">
+              <span>Made with <i class="fas fa-heart"></i> by <a class="text-white" href="https://github.com/CSaratakij">CSaratakij</a></span>
+          </div>
+        </footer>
+        <!-- Temp input -->
+        <textarea class="hidden" id="temp-input"></textarea>
+        <!-- Popper, Bootstrap js-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
