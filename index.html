@@ -8,8 +8,9 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="js/index.js"></script>
     </head>
-    <body class="d-flex flex-column h-100">
+    <body onload="intialize()" class="d-flex flex-column h-100">
         <!-- Github Ribbon -->
         <a href="https://github.com/CSaratakij/rofi-menu-generator"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
         <!-- App -->
@@ -43,13 +44,13 @@
                                   <div class="px-2"></div>
                                   <div class="form-col">
                                     <label for="menuFontSize">Size</label>
-                                    <input type="text" class="form-control" id="menuFontSize" placeholder="Enter font size" value="18">
+                                    <input type="number" class="form-control" id="menuFontSize" placeholder="Enter font size" value="18">
                                   </div>
                               </div>
                           </div>
                           <div class="py-2"></div>
                           <div class="form-group form-check align-middle">
-                            <input type="checkbox" class="form-check-input" id="hideScrollbarCheck" checked>
+                            <input id="menu-hide-scrollbar-info" type="checkbox" class="form-check-input" id="hideScrollbarCheck" checked>
                             <label class="form-check-label" for="hideScrollbarCheck">Hide scrollbar</label>
                           </div>
                         </form>
@@ -74,49 +75,27 @@
                             </tr>
                           </thead>
                           <tbody id="menu-list">
-                            <tr>
-                              <th class="align-middle" scope="row">1</th>
-                              <td colspan="2" class="align-middle">
-                                  <input type="text" class="form-control" placeholder="Enter menu item name...">
-                              </td>
-                              <td colspan="2" class="align-middle">
-                                  <input type="text" class="form-control" placeholder="Enter executable app command...">
-                              </td>
-                              <th class="text-center text-danger align-middle">
-                                  <a style="cursor: pointer" onclick="alert('1')">X<a>
-                              </th>
-                            </tr>
-                            <tr>
-                              <th class="align-middle" scope="row">2</th>
-                              <td colspan="2" class="align-middle">
-                                  <input type="text" class="form-control" placeholder="Enter menu item name...">
-                              </td>
-                              <td colspan="2" class="align-middle">
-                                  <input type="text" class="form-control" placeholder="Enter executable app command...">
-                              </td>
-                              <th class="text-center text-danger align-middle">
-                                  <a style="cursor: pointer" onclick="alert('2')">X<a>
-                              </th>
-                            </tr>
-                            <tr>
-                              <th class="align-middle" scope="row">3</th>
-                              <td colspan="2" class="align-middle">
-                                  <input type="text" class="form-control" placeholder="Enter menu item name...">
-                              </td>
-                              <td colspan="2" class="align-middle">
-                                  <input type="text" class="form-control" placeholder="Enter executable app command...">
-                              </td>
-                              <th class="text-center text-danger align-middle">
-                                  <a style="cursor: pointer" onclick="alert('3')">X<a>
-                              </th>
-                            </tr>
+                              <template>
+                                <tr id="menu-1">
+                                  <th class="align-middle" scope="row">1</th>
+                                  <td colspan="2" class="align-middle">
+                                      <input type="text" class="form-control" placeholder="Enter menu item name...">
+                                  </td>
+                                  <td colspan="2" class="align-middle">
+                                      <input type="text" class="form-control" placeholder="Enter executable app command...">
+                                  </td>
+                                  <th class="text-center text-danger align-middle">
+                                      <a style="cursor: pointer">X<a>
+                                  </th>
+                                </tr>
+                              </template>
                           </tbody>
                         </table>
 
                     <!-- Add new menu entry button -->
                     <div class="d-flex mb-0 input-group-prepend px-0">
-                        <button type="button" class="ml-auto mb-0 btn btn-md btn-outline-secondary"><span>Sort</span></button>
-                        <button type="button" class="btn btn-md btn-outline-secondary"><span><strong>+</strong></span></button>
+                        <button onclick="sortMenuEntry()" type="button" class="ml-auto mb-0 btn btn-md btn-outline-secondary"><span>Sort</span></button>
+                        <button onclick="addMenuEntry('', '')" type="button" class="btn btn-md btn-outline-secondary"><span><strong>+</strong></span></button>
                     </div>
                     </div>
                 </div>
@@ -124,13 +103,32 @@
             <div class="py-4"></div>
             <!-- Generate Button -->
             <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-lg btn-success">Generate</button>
+                <button onclick="onButtonGenerateClick()" type="button" class="btn btn-lg btn-success">Generate</button>
             </div>
             <div class="text-center mt-1 text-primary">
                 <p onclick="alert('')" style="text-decoration: underline; cursor: pointer"><small>How to use</small></p>
             </div>
             <div class="py-5"></div>
             <div class="py-3"></div>
+        </div>
+        <!-- Warning Modal -->
+        <div class="modal fade" id="warning-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="warning-modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div id="warning-modal-body" class="modal-body">
+                ...
+              </div>
+              <div class="modal-footer">
+                <button id="warning-modal-close-button" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
         </main>
         <footer class="footer mt-auto py-3 bg-dark">
