@@ -107,6 +107,7 @@ function getMenuInfo(isAutoSubstitute = true) {
     menu.title = document.getElementById("menuTitle").value;
     menu.fontName = document.getElementById("menuFont").value;
     menu.fontSize = document.getElementById("menuFontSize").value;
+    menu.isHideScrollbar = document.getElementById("hideScrollbarCheck").checked;
     menu.entryList = [];
 
     let menuList = document.getElementById("menu-list");
@@ -154,7 +155,7 @@ function intialize() {
 }
 
 function onButtonGenerateClick() {
-    let info = getMenuInfo();
+    var info = getMenuInfo();
 
     if (info.entryList.length == 0) {
         let title = document.getElementById("warning-modal-title");
@@ -176,8 +177,51 @@ function onButtonGenerateClick() {
     generateBashScript(info);
 }
 
-function generateBashScript(obj) {
-    let strResult = "";
-    return strResult;
+function generateBashScript(menu) {
+    //Shebang bash script
+    let source = "#!/bin/sh\n\n"
+    source += "MENU=\""
+
+    //Menu list
+    let i;
+    for (i = 0; i < menu.entryList.length; i++) {
+        source += menu.entryList[i].name;
+        if (i + 1 < menu.entryList.length) {
+            source += "|";
+        }
+    }
+    source += "\"\n";
+
+    //Font
+    source += "FONT_NAME=" + "\"" + menu.fontName + "\"\n";
+    source += "FONT_SIZE=" + menu.fontSize + "\n";
+
+    source += "\n";
+
+    //Dialog result
+    source += "DIALOG_RESULT=$(echo $MENU | rofi -sep \"|\" -dmenu -i -p " + '\"' + menu.title + '\"' + ((menu.isHideScrollbar) ? " -hide-scrollbar" : "") + " -tokenize -lines " + ((menu.entryList.length > 5 ? 5 : menu.entryList.length)) + " -width 50 -padding 50 -disable-history -font \"$FONT_NAME $FONT_SIZE\")\n";
+
+    source += "\n";
+
+    //Log
+    source += "echo \"This result is : $DIALOG_RESULT\"\n";
+    source += "sleep 1;\n"
+
+    source += "\n";
+
+    //Run command by dialog result
+    for (i = 0; i < menu.entryList.length; i++) {
+        source += ((i == 0) ? "if" : "elif") + " [ \"$DIALOG_RESULT\" = \"" + menu.entryList[i].name + "\" ];\n";
+        source += "then\n";
+        source += "\texec " + menu.entryList[i].command + "\n";
+
+        if (i < (menu.entryList.length - 1)) {
+            source += "\n";
+        }
+    }
+
+    source += "fi\n\n";
+    console.log(source);
+    return source;
 }
 
