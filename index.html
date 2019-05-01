@@ -109,7 +109,7 @@
                 <button onclick="onButtonGenerateClick()" type="button" class="btn btn-lg btn-success">Generate</button>
             </div>
             <div class="text-center mt-1 text-primary">
-                <p onclick="alert('')" style="text-decoration: underline; cursor: pointer"><small>How to use</small></p>
+                <p onclick="showHelp()" style="text-decoration: underline; cursor: pointer"><small>How to use</small></p>
             </div>
             <div class="py-5"></div>
             <div class="py-3"></div>
@@ -129,6 +129,32 @@
               </div>
               <div class="modal-footer">
                 <button id="warning-modal-close-button" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Help Modal -->
+        <div class="modal fade" id="help-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="help-modal-title">Help</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div id="help-modal-body" class="modal-body">
+                  <p>
+                  This is a tools to generate the <strong>bash</strong> script and use <a href="https://github.com/davatorium/rofi"><u>rofi</u></a>
+                    to generate a menu by pipe the text into rofi.<br>
+                    Once you generate a menu, make the script executable and run.<br><br>
+                    This tools only generate a menu.<br>
+                    For rofi <strong>theme</strong>, please goto this <a href="https://github.com/davatorium/rofi-themes" ><u>link</u></a><br>
+                    For further information, see a <a href="https://github.com/CSaratakij/rofi-menu-generator"><u>git repository</u></a>
+                  </p>
+              </div>
+              <div class="modal-footer">
+                <button id="help-modal-close-button" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
               </div>
             </div>
           </div>

@@ -135,6 +135,10 @@ function onButtonGenerateClick() {
     $('#result-modal').modal('toggle');
 }
 
+function showHelp() {
+    $('#help-modal').modal("toggle");
+}
+
 /* View Model */
 function getMenuInfo(isAutoSubstitute = true) {
     let menu = new Object();
@@ -246,7 +250,6 @@ function generateBashScript(menu) {
     }
 
     source += "fi\n\n";
-    console.log(source);
     return source;
 }
 
